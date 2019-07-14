@@ -86,6 +86,17 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/avatar.jpeg":
+/*!*************************!*\
+  !*** ./src/avatar.jpeg ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__.p + \"avatar_761927c8a82c0875c331341cf2350447.jpeg\";\n\n//# sourceURL=webpack:///./src/avatar.jpeg?");
+
+/***/ }),
+
 /***/ "./src/content.js":
 /*!************************!*\
   !*** ./src/content.js ***!
@@ -118,18 +129,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nfunction Header() {\n  var do
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _content__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./content */ \"./src/content.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n\n\n\nconst jpeg = __webpack_require__(/*! ./people.jpeg */ \"./src/people.jpeg\");\n// webpack -v 打印的是全局的webpack的版本\n// npx webpack -v 打印的是项目的webpack版本\nconsole.log(jpeg);\nnew _header__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\nnew _sidebar__WEBPACK_IMPORTED_MODULE_2__[\"default\"]();\nnew _content__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n\n\n//# sourceURL=webpack:///./src/index.js?");
-
-/***/ }),
-
-/***/ "./src/people.jpeg":
-/*!*************************!*\
-  !*** ./src/people.jpeg ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("module.exports = __webpack_require__.p + \"761927c8a82c0875c331341cf2350447.jpeg\";\n\n//# sourceURL=webpack:///./src/people.jpeg?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./header */ \"./src/header.js\");\n/* harmony import */ var _content__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./content */ \"./src/content.js\");\n/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sidebar */ \"./src/sidebar.js\");\n/* harmony import */ var _avatar_jpeg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./avatar.jpeg */ \"./src/avatar.jpeg\");\n/* harmony import */ var _avatar_jpeg__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_avatar_jpeg__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n\n// webpack -v 打印的是全局的webpack的版本\n// npx webpack -v 打印的是项目的webpack版本\nvar img = new Image();\nimg.src = _avatar_jpeg__WEBPACK_IMPORTED_MODULE_3___default.a;\nconsole.log(_avatar_jpeg__WEBPACK_IMPORTED_MODULE_3___default.a);\nvar dom = document.getElementById('root');\ndom.appendChild(img);\nnew _header__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\nnew _sidebar__WEBPACK_IMPORTED_MODULE_2__[\"default\"]();\nnew _content__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 

@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "file-loader": "^4.0.0",
+    "url-loader": "^2.0.1",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"
   },

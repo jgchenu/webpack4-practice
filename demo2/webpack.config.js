@@ -4,16 +4,19 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js',
   module: {
-    rules: [{
-      test: /\.jpeg$/,
-      use: {
-        loader: 'file-loader',
-        options:{
-          name: '[name]_[hash].[ext]',
-          outputPath: 'images/',
+    rules: [
+      {
+        test: /\.(jpeg|jpg|png|gif)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            name: '[name]_[hash].[ext]',
+            outputPath: 'images/',
+            limit: 204800
+          }
         }
       }
-    }]
+    ]
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

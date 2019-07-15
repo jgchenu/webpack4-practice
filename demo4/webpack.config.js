@@ -1,5 +1,7 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 // npx webpack --config webpack.config11.js 指定配置文件打包
 module.exports = {
   mode: 'development',
@@ -40,8 +42,11 @@ module.exports = {
       }
     ]
   },
-  plugins:[
-    new HtmlWebpackPlugin()
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'src/index.html'
+    }),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),

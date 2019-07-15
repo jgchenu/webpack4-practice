@@ -15,9 +15,27 @@ module.exports = {
             limit: 204800
           }
         }
-      },{
+      },
+      {
+        test: /\.(eot|ttf|svg)$/,
+        use: {
+          loader: 'file-loader'
+        }
+      },
+      {
         test: /\.less$/,
-        use:['style-loader','css-loader','postcss-loader','less-loader']
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              modules: true
+            }
+          },
+          'postcss-loader',
+          'less-loader'
+        ]
       }
     ]
   },

@@ -1,0 +1,3 @@
+div.item:nth-of-type(odd) {
+  background: lightblue;
+}

@@ -4,11 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server",
+    "middleware": "node server.js"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.1",
     "clean-webpack-plugin": "^3.0.0",
+    "express": "^4.17.1",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "less-loader": "^5.0.0",
@@ -16,7 +19,9 @@
     "postcss-loader": "^3.0.0",
     "url-loader": "^2.0.1",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-middleware": "^3.7.0",
+    "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
     "less": "^3.9.0"

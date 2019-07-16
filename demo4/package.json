@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "bundle": "webpack"
+    "watch": "webpack --watch"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.1",

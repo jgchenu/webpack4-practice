@@ -6,7 +6,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-   main: './src/index.js',
+    main: './src/index.js'
+  },
+  devServer: {
+    contentBase: './dist',
+    open: true,
+    port: 8080
   },
   module: {
     rules: [
@@ -48,10 +53,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
-    }),
+    })
   ],
   output: {
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'bundle.js'
   }
 };

@@ -2,11 +2,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
-  mode: 'development',
   entry: {
-    main: './src/index.js'
+    loadash: './src/lodash.js',
+    main: './src/index.js',
   },
-  devtool:'cheap-module-eval-source-map', //prod 环境用cheap-module-source-map,dev 环境用cheap-module-eval-source-map
   module: {
     rules: [
       {
@@ -53,9 +52,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: [path.join(process.cwd(), '../dist/**/*')]
+    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     })
   ],
+  output: {
+    path: path.resolve(__dirname, '../dist'),
+    filename: '[name].js'
+  }
 };

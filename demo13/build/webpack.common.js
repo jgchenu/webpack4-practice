@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
+
 module.exports = {
   entry: {
     main: './src/index.js'
@@ -10,7 +12,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        use: [
+          {
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'imports-loader?this=>window'
+          }
+        ]
       },
       {
         test: /\.(jpeg|jpg|png|gif)$/,
@@ -28,25 +37,6 @@ module.exports = {
         use: {
           loader: 'file-loader'
         }
-      },
-      {
-        test: /\.less$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 2,
-              modules: true
-            }
-          },
-          'postcss-loader',
-          'less-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
       }
     ]
   },
@@ -56,15 +46,17 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      _: 'lodash'
     })
   ],
   optimization: {
+    usedExports: true,
     splitChunks: {
       chunks: 'all'
     }
   },
-  output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: '[name].js'
-  }
+  performance: false
 };

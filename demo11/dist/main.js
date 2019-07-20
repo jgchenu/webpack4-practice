@@ -3,8 +3,8 @@
 /******/ 	function webpackJsonpCallback(data) {
 /******/ 		var chunkIds = data[0];
 /******/ 		var moreModules = data[1];
-/******/ 		var executeModules = data[2];
 /******/
+/******/ 		var prefetchChunks = data[3] || [];
 /******/ 		// add "moreModules" to the modules object,
 /******/ 		// then flag all "chunkIds" as loaded and fire callback
 /******/ 		var moduleId, chunkId, i = 0, resolves = [];
@@ -21,34 +21,27 @@
 /******/ 			}
 /******/ 		}
 /******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/ 		// chunk prefetching for javascript
+/******/ 		prefetchChunks.forEach(function(chunkId) {
+/******/ 			if(installedChunks[chunkId] === undefined) {
+/******/ 				installedChunks[chunkId] = null;
+/******/ 				var link = document.createElement('link');
 /******/
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					link.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				link.rel = "prefetch";
+/******/ 				link.as = "script";
+/******/ 				link.href = jsonpScriptSrc(chunkId);
+/******/ 				document.head.appendChild(link);
+/******/ 			}
+/******/ 		});
 /******/ 		while(resolves.length) {
 /******/ 			resolves.shift()();
 /******/ 		}
 /******/
-/******/ 		// add entry modules from loaded chunk to deferred list
-/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
-/******/
-/******/ 		// run deferred modules when all chunks ready
-/******/ 		return checkDeferredModules();
 /******/ 	};
-/******/ 	function checkDeferredModules() {
-/******/ 		var result;
-/******/ 		for(var i = 0; i < deferredModules.length; i++) {
-/******/ 			var deferredModule = deferredModules[i];
-/******/ 			var fulfilled = true;
-/******/ 			for(var j = 1; j < deferredModule.length; j++) {
-/******/ 				var depId = deferredModule[j];
-/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 			}
-/******/ 			if(fulfilled) {
-/******/ 				deferredModules.splice(i--, 1);
-/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 			}
-/******/ 		}
 /******/
-/******/ 		return result;
-/******/ 	}
 /******/ 	function hotDisposeChunk(chunkId) {
 /******/ 		delete installedChunks[chunkId];
 /******/ 	}
@@ -113,7 +106,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "58c3c1ce365f97487b7a";
+/******/ 	var hotCurrentHash = "d192c66713b9365af6d8";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -763,7 +756,12 @@
 /******/ 		"main": 0
 /******/ 	};
 /******/
-/******/ 	var deferredModules = [];
+/******/
+/******/
+/******/ 	// script path function
+/******/ 	function jsonpScriptSrc(chunkId) {
+/******/ 		return __webpack_require__.p + "" + ({"vendors~lodash":"vendors~lodash"}[chunkId]||chunkId) + ".chunk.js"
+/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -792,6 +790,67 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// JSONP chunk loading for javascript
+/******/
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
+/******/
+/******/ 			// a Promise means "currently loading".
+/******/ 			if(installedChunkData) {
+/******/ 				promises.push(installedChunkData[2]);
+/******/ 			} else {
+/******/ 				// setup Promise in chunk cache
+/******/ 				var promise = new Promise(function(resolve, reject) {
+/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 				});
+/******/ 				promises.push(installedChunkData[2] = promise);
+/******/
+/******/ 				// start chunk loading
+/******/ 				var script = document.createElement('script');
+/******/ 				var onScriptComplete;
+/******/
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.src = jsonpScriptSrc(chunkId);
+/******/
+/******/ 				// create error before stack unwound to get useful stacktrace later
+/******/ 				var error = new Error();
+/******/ 				onScriptComplete = function (event) {
+/******/ 					// avoid mem leaks in IE.
+/******/ 					script.onerror = script.onload = null;
+/******/ 					clearTimeout(timeout);
+/******/ 					var chunk = installedChunks[chunkId];
+/******/ 					if(chunk !== 0) {
+/******/ 						if(chunk) {
+/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 							var realSrc = event && event.target && event.target.src;
+/******/ 							error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 							error.name = 'ChunkLoadError';
+/******/ 							error.type = errorType;
+/******/ 							error.request = realSrc;
+/******/ 							chunk[1](error);
+/******/ 						}
+/******/ 						installedChunks[chunkId] = undefined;
+/******/ 					}
+/******/ 				};
+/******/ 				var timeout = setTimeout(function(){
+/******/ 					onScriptComplete({ type: 'timeout', target: script });
+/******/ 				}, 120000);
+/******/ 				script.onerror = script.onload = onScriptComplete;
+/******/ 				document.head.appendChild(script);
+/******/ 			}
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -845,6 +904,9 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
 /******/ 	// __webpack_hash__
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
@@ -856,10 +918,13 @@
 /******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
 /******/
-/******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["./src/index.js","vendors~main"]);
-/******/ 	// run deferred modules when ready
-/******/ 	return checkDeferredModules();
+/******/ 	var startupResult = (function() {
+/******/ 	// Load entry module and return exports
+/******/ 	return hotCreateRequire("./src/index.js")(__webpack_require__.s = "./src/index.js");
+/******/ 	})();
+/******/
+/******/ 	webpackJsonpCallback([[], {}, 0, [0]]);
+/******/ 	return startupResult;
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -868,12 +933,11 @@
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! no static exports found */
 /*! all exports used */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ \"./node_modules/lodash/lodash.js\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);\n/**\n * 假设业务代码为1mb大小，lodash代码为1mb大小.\n * \n * 不用Code Splitting \n * 首次访问页面，需要加载main.js(2mb)\n * 当业务逻辑变化，又要打包，然后重新加载main.js(2mb)\n * \n * 用Code Splitting \n * 首次访问页面，需要加载main.js(1mb) + lodash(1mb\n * 当业务逻辑变化，重新打包，只需要重新加载 main.js(1mb)\n */\n\nconsole.log(lodash__WEBPACK_IMPORTED_MODULE_0___default.a.join(['a', 'b', 'c'], '***'));\nconsole.log(lodash__WEBPACK_IMPORTED_MODULE_0___default.a.join(['a', 'b', 'c'], '****'));\nconsole.log(lodash__WEBPACK_IMPORTED_MODULE_0___default.a.join(['a', 'b', 'c'], '*****'));\nconsole.log(lodash__WEBPACK_IMPORTED_MODULE_0___default.a.join(['a', 'b', 'c'], '******'));//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvaW5kZXguanMuanMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvaW5kZXguanM/YjYzNSJdLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIOWBh+iuvuS4muWKoeS7o+eggeS4ujFtYuWkp+Wwj++8jGxvZGFzaOS7o+eggeS4ujFtYuWkp+Wwjy5cbiAqIFxuICog5LiN55SoQ29kZSBTcGxpdHRpbmcgXG4gKiDpppbmrKHorr/pl67pobXpnaLvvIzpnIDopoHliqDovb1tYWluLmpzKDJtYilcbiAqIOW9k+S4muWKoemAu+i+keWPmOWMlu+8jOWPiOimgeaJk+WMhe+8jOeEtuWQjumHjeaWsOWKoOi9vW1haW4uanMoMm1iKVxuICogXG4gKiDnlKhDb2RlIFNwbGl0dGluZyBcbiAqIOmmluasoeiuv+mXrumhtemdou+8jOmcgOimgeWKoOi9vW1haW4uanMoMW1iKSArIGxvZGFzaCgxbWJcbiAqIOW9k+S4muWKoemAu+i+keWPmOWMlu+8jOmHjeaWsOaJk+WMhe+8jOWPqumcgOimgemHjeaWsOWKoOi9vSBtYWluLmpzKDFtYilcbiAqL1xuXG5pbXBvcnQgXyBmcm9tICdsb2Rhc2gnO1xuXG5jb25zb2xlLmxvZyhfLmpvaW4oWydhJywnYicsJ2MnXSwnKioqJykpO1xuY29uc29sZS5sb2coXy5qb2luKFsnYScsJ2InLCdjJ10sJyoqKionKSk7XG5jb25zb2xlLmxvZyhfLmpvaW4oWydhJywnYicsJ2MnXSwnKioqKionKSk7XG5jb25zb2xlLmxvZyhfLmpvaW4oWydhJywnYicsJ2MnXSwnKioqKioqJykpO1xuXG4iXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFBQTtBQUFBOzs7Ozs7Ozs7OztBQVlBO0FBRUE7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/index.js\n");
+eval("/**\n * 假设业务代码为1mb大小，lodash代码为1mb大小.\n *\n * 不用Code Splitting\n * 首次访问页面，需要加载main.js(2mb)\n * 当业务逻辑变化，又要打包，然后重新加载main.js(2mb)\n *\n * 用Code Splitting\n * 首次访问页面，需要加载main.js(1mb) + lodash(1mb\n * 当业务逻辑变化，重新打包，只需要重新加载 main.js(1mb)\n */\nasync function getComponent() {\n  const {\n    default: _\n  } = await __webpack_require__.e(/*! import() | lodash */ \"vendors~lodash\").then(__webpack_require__.t.bind(null, /*! lodash */ \"./node_modules/lodash/lodash.js\", 7));\n  const element = document.createElement('div');\n  element.innerHTML = _.join(['a', 'b', 'c'], '***');\n  return element;\n}\n\ndocument.addEventListener('click', async () => {\n  const {\n    default: click\n  } = await __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./click.js */ \"./src/click.js\"));\n  click();\n  getComponent().then(element => {\n    document.body.appendChild(element);\n  });\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvaW5kZXguanMuanMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvaW5kZXguanM/YjYzNSJdLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIOWBh+iuvuS4muWKoeS7o+eggeS4ujFtYuWkp+Wwj++8jGxvZGFzaOS7o+eggeS4ujFtYuWkp+Wwjy5cbiAqXG4gKiDkuI3nlKhDb2RlIFNwbGl0dGluZ1xuICog6aaW5qyh6K6/6Zeu6aG16Z2i77yM6ZyA6KaB5Yqg6L29bWFpbi5qcygybWIpXG4gKiDlvZPkuJrliqHpgLvovpHlj5jljJbvvIzlj4jopoHmiZPljIXvvIznhLblkI7ph43mlrDliqDovb1tYWluLmpzKDJtYilcbiAqXG4gKiDnlKhDb2RlIFNwbGl0dGluZ1xuICog6aaW5qyh6K6/6Zeu6aG16Z2i77yM6ZyA6KaB5Yqg6L29bWFpbi5qcygxbWIpICsgbG9kYXNoKDFtYlxuICog5b2T5Lia5Yqh6YC76L6R5Y+Y5YyW77yM6YeN5paw5omT5YyF77yM5Y+q6ZyA6KaB6YeN5paw5Yqg6L29IG1haW4uanMoMW1iKVxuICovXG5cbmFzeW5jIGZ1bmN0aW9uIGdldENvbXBvbmVudCgpIHtcblxuICBjb25zdCB7IGRlZmF1bHQ6IF8gfSA9IGF3YWl0IGltcG9ydCgvKiB3ZWJwYWNrQ2h1bmtOYW1lOidsb2Rhc2gnICovICdsb2Rhc2gnKTtcbiAgY29uc3QgZWxlbWVudCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuICBlbGVtZW50LmlubmVySFRNTCA9IF8uam9pbihbJ2EnLCAnYicsICdjJ10sICcqKionKTtcbiAgcmV0dXJuIGVsZW1lbnQ7XG59XG5cbmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgYXN5bmMgKCkgPT4ge1xuICBjb25zdCB7IGRlZmF1bHQ6IGNsaWNrIH0gPSBhd2FpdCBpbXBvcnQoLyogd2VicGFja1ByZWZldGNoOiB0cnVlICovICcuL2NsaWNrLmpzJyk7XG4gIGNsaWNrKCk7XG4gIGdldENvbXBvbmVudCgpLnRoZW4oZWxlbWVudCA9PiB7XG4gICAgZG9jdW1lbnQuYm9keS5hcHBlbmRDaGlsZChlbGVtZW50KTtcbiAgfSk7XG59KTtcbiJdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7Ozs7Ozs7O0FBWUE7QUFFQTtBQUFBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUFBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/index.js\n");
 
 /***/ })
 

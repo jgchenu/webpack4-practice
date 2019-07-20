@@ -28,25 +28,6 @@ module.exports = {
         use: {
           loader: 'file-loader'
         }
-      },
-      {
-        test: /\.less$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 2,
-              modules: true
-            }
-          },
-          'postcss-loader',
-          'less-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
       }
     ]
   },
@@ -59,6 +40,7 @@ module.exports = {
     })
   ],
   optimization: {
+    usedExports:true,
     splitChunks: {
       chunks: 'all'
     }

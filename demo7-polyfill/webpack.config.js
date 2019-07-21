@@ -11,7 +11,7 @@ const webpack = require('webpack');
 //       targets: {
 //         chrome: '67'
 //       },
-//       useBuiltIns: 'usage'
+//       useBuiltIns: 'usage' // 对于babel-polyfill 只打包使用到的兼容代码，例如在项目中使用了Promise，那么是打包了Promise的polyfill 代码
 //     }
 //   ]
 // ]

@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js',
-    libraryTarget: 'umd',
-    library: 'root'
+    libraryTarget: 'umd', //支持通用的引入 import require
+    library: 'root' // 暴露全局变量
   }
 };

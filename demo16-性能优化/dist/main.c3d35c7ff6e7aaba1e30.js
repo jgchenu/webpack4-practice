@@ -1,66 +1,6 @@
 /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1];
-/******/ 		var executeModules = data[2];
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 		// add entry modules from loaded chunk to deferred list
-/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
-/******/
-/******/ 		// run deferred modules when all chunks ready
-/******/ 		return checkDeferredModules();
-/******/ 	};
-/******/ 	function checkDeferredModules() {
-/******/ 		var result;
-/******/ 		for(var i = 0; i < deferredModules.length; i++) {
-/******/ 			var deferredModule = deferredModules[i];
-/******/ 			var fulfilled = true;
-/******/ 			for(var j = 1; j < deferredModule.length; j++) {
-/******/ 				var depId = deferredModule[j];
-/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 			}
-/******/ 			if(fulfilled) {
-/******/ 				deferredModules.splice(i--, 1);
-/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		return result;
-/******/ 	}
-/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 	// Promise = chunk loading, 0 = chunk loaded
-/******/ 	var installedChunks = {
-/******/ 		0: 0
-/******/ 	};
-/******/
-/******/ 	var deferredModules = [];
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -139,61 +79,85 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
-/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
-/******/
-/******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push([8,1]);
-/******/ 	// run deferred modules when ready
-/******/ 	return checkDeferredModules();
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 8:
+module.exports = (__webpack_require__(1))(1);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = react;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(1))(5);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__(4))(10);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = lodash;
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
+// EXTERNAL MODULE: delegated ./node_modules/react/index.js from dll-reference react
+var reactfrom_dll_reference_react = __webpack_require__(0);
+var reactfrom_dll_reference_react_default = /*#__PURE__*/__webpack_require__.n(reactfrom_dll_reference_react);
 
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(2);
-var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
+// EXTERNAL MODULE: delegated ./node_modules/react-dom/index.js from dll-reference react
+var react_domfrom_dll_reference_react = __webpack_require__(2);
+var react_domfrom_dll_reference_react_default = /*#__PURE__*/__webpack_require__.n(react_domfrom_dll_reference_react);
 
 // CONCATENATED MODULE: ./src/Child.jsx
 
 
-class Child_Child extends react_default.a.Component {
+class Child_Child extends reactfrom_dll_reference_react_default.a.Component {
   render() {
-    return react_default.a.createElement("div", null, "this is Child");
+    return reactfrom_dll_reference_react_default.a.createElement("div", null, "this is Child");
   }
 
 }
 
 /* harmony default export */ var src_Child = (Child_Child);
+// EXTERNAL MODULE: delegated ./node_modules/lodash/lodash.js from dll-reference lodash
+var lodashfrom_dll_reference_lodash = __webpack_require__(3);
+var lodashfrom_dll_reference_lodash_default = /*#__PURE__*/__webpack_require__.n(lodashfrom_dll_reference_lodash);
+
 // CONCATENATED MODULE: ./src/index.js
 
 
 
 
-class src_App extends react_default.a.Component {
+
+class src_App extends reactfrom_dll_reference_react_default.a.Component {
   render() {
-    return react_default.a.createElement("div", null, react_default.a.createElement("div", null, "this is App"), react_default.a.createElement(src_Child, null));
+    return reactfrom_dll_reference_react_default.a.createElement("div", null, reactfrom_dll_reference_react_default.a.createElement("div", null, "this is App ,", lodashfrom_dll_reference_lodash_default.a.join(['a', 'b'], '*')), reactfrom_dll_reference_react_default.a.createElement(src_Child, null));
   }
 
 }
 
-react_dom_default.a.render(react_default.a.createElement(src_App, null), document.getElementById('root'));
+react_domfrom_dll_reference_react_default.a.render(reactfrom_dll_reference_react_default.a.createElement(src_App, null), document.getElementById('root'));
 
 /***/ })
-
-/******/ });
+/******/ ]);

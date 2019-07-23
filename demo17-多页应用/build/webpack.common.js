@@ -8,36 +8,49 @@ const fs = require('fs');
 // 使用尽可能少不必要的loader
 // 如果不是必要，不要进行代码压缩等操作，如开发环境就没必要代码压缩
 
-const plugins = [
-  new CleanWebpackPlugin({
-    cleanAfterEveryBuildPatterns: [path.join(process.cwd(), '../dist/**/*')]
-  }),
-  new HtmlWebpackPlugin({
-    template: 'src/index.html',
-    filename:'index.html'
-  })
-];
+const makePlugins = configs => {
+  const plugins = [
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: [path.join(process.cwd(), '../dist/**/*')]
+    })
+  ];
 
-const files = fs.readdirSync(path.resolve(__dirname, '../dll/'));
-files.forEach(file => {
-  if (/.*\.dll\.js/.test(file)) {
+  Object.keys(configs.entry).forEach(key => {
     plugins.push(
-      new AddAssetHtmlPlugin({
-        filepath: path.resolve(__dirname, '../dll', file)
+      new HtmlWebpackPlugin({
+        template: 'src/index.html',
+        filename: `${key}.html`,
+        chunks: ['vendor', key]
       })
     );
-  }
-  if (/.*\.manifest\.json/.test(file)) {
-    plugins.push(
-      new webpack.DllReferencePlugin({
-        manifest: path.resolve(__dirname, '../dll', file)
-      })
-    );
-  }
-});
-module.exports = {
+  });
+
+  const files = fs.readdirSync(path.resolve(__dirname, '../dll/'));
+
+  files.forEach(file => {
+    if (/.*\.dll\.js/.test(file)) {
+      plugins.push(
+        new AddAssetHtmlPlugin({
+          filepath: path.resolve(__dirname, '../dll', file)
+        })
+      );
+    }
+    if (/.*\.manifest\.json/.test(file)) {
+      plugins.push(
+        new webpack.DllReferencePlugin({
+          manifest: path.resolve(__dirname, '../dll', file)
+        })
+      );
+    }
+  });
+
+  return plugins;
+};
+
+const configs = {
   entry: {
-    main: './src/index.js'
+    index: './src/index.js',
+    list: './src/list.js'
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -77,14 +90,13 @@ module.exports = {
       }
     ]
   },
-  plugins,
   optimization: {
     usedExports: true,
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
         vendors: {
-          test: /node_modules/,
+          test: /[\\/]node_modules[\\/]/,
           priority: -10,
           name: 'vendor'
         }
@@ -93,3 +105,7 @@ module.exports = {
   },
   performance: false
 };
+
+configs.plugins = makePlugins(configs);
+
+module.exports = configs;

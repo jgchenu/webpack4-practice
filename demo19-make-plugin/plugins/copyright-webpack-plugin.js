@@ -1,8 +1,10 @@
 class CopyrightWebpackPlugin {
   apply(compiler) {
+    // 编译时
     compiler.hooks.compile.tap('CopyrightWebpackPlugin', () => {
       console.log('compile');
     });
+    // 文件构建后输出到目录之前
     compiler.hooks.emit.tapAsync(
       'CopyrightWebpackPlugin',
       (compilation, cb) => {

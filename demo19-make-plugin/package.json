@@ -1,0 +1,14 @@
+{
+  "name": "demo19-make-plugin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "debug": "node --inspect --inspect-brk node_modules/webpack/bin/webpack.js"
+  },
+  "devDependencies": {
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  }
+}

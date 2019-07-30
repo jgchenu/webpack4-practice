@@ -1,0 +1,15 @@
+{
+  "name": "demo20-bundler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node bundler.js | highlight"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/parser": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/traverse": "^7.5.5"
+  }
+}
